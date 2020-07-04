@@ -38,7 +38,7 @@ function App() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ name: newFriend, age: newAge })
         };
-
+        
         if (newFriend) {
           console.log("HERE:LKSDJF:LSKDJF:LSKDJF", newFriend, newAge)
           fetch('/api/add', requestOptions)

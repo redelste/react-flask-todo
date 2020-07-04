@@ -17,8 +17,8 @@ const TodoList = ({ friends, id, setFriends }) => {
                             // console.log(";laksjdf;lakjsdf;lkasdjf",{ [friend]: friends[friend] })
                             const requestOptions = {
                                 method: 'DELETE',
-                                headers: {'Content-Type' : 'application/json'},
-                                body: JSON.stringify({ "title": friend})
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ "title": friend })
                             };
                             fetch(`/api/delete`, requestOptions)
                                 .then(response => response.json())
@@ -33,21 +33,24 @@ const TodoList = ({ friends, id, setFriends }) => {
                             setUpdateFriend(event.target.value)
                         }}></input>
                         <button onClick={() => {
-                            console.log(friend)
                             const requestOptions = {
                                 method: 'PUT',
                                 headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ newName: updateFriend})
+                                body: JSON.stringify({ newName: updateFriend })
                             };
-                            fetch(`/api/update/${friend}`, requestOptions)
-                                .then(response => response.json())
-                                .then(data => {
-                                    const {[friend]:_, ...rest} = friends
-                                    setFriends({
-                                        ...rest,
-                                        [`${updateFriend}`]: friends[friend]
+                            if (updateFriend) {
+                                fetch(`/api/update/${friend}`, requestOptions)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const { [friend]: _, ...rest } = friends
+                                        setFriends({
+                                            ...rest,
+                                            [`${updateFriend}`]: friends[friend]
+                                        })
                                     })
-                                })
+                            } else{
+                                alert("Please enter a title/name")
+                            }
                         }}>
                             Update
                         </button>
