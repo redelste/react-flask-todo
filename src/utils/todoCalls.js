@@ -1,15 +1,19 @@
 
 
-const addTodo = (newFriend, newAge, setFriends, friends) => {
-    console.log(newFriend)
+export const addTodo = (newTodo, newAge, newDescription, cb) => {
+    console.log(newTodo, newAge, newDescription)
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newFriend, age: newAge })
+        body: JSON.stringify({ name: newTodo, age: newAge, description: newDescription })
     };
     fetch('/api/add', requestOptions)
         .then(response => response.json())
-        .then(data => setFriends({
+        .then(data => {
+            console.log("DATA", data)
+            cb(data)
+        }
+            // setFriends({
             // spread = "..."
             // it unpacks the dictionary 
             // must spread a dict into another type of container
@@ -25,9 +29,9 @@ const addTodo = (newFriend, newAge, setFriends, friends) => {
             we do this because of immutability.
             Dont want to mutate things, only create new thingss
             */
-            ...friends,
-            [`${data.name}`]: data.age
-        })
+            // ...friends,
+            // [`${data.name}`]: data.age
+        // })
         )
 } 
 
