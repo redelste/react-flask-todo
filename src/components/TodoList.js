@@ -51,16 +51,43 @@ const TodoList = ({ todos, setTodos }) => {
     };
 
     const classes = useStyles();
-
+    console.log("TODOS", todos)
     return (
         <div>
             <ul>
-                {todos.map(todo => 
-                    <div key={todo.name}>
+                {todos.map(todo =>
+                    <div key={todo.id}>
                         {todo.name}
-                    </div>   
-                
-                
+
+                        <button onClick={() => {
+                            const requestOptions = {
+                                method: 'PUT',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ newName: updateTodo })
+                            };
+                            if (updateTodo) {
+                                fetch(`/api/update/${todo.id}`, requestOptions)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const [{id = todo.id, ...restOfAttributes}, ...rest] = todos
+                                        console.log("REST REST RES",rest)
+                                        setTodos([
+                                            { name: updateTodo, ...restOfAttributes},
+                                            ...rest
+                                        ])
+                                    })
+                            } else {
+                                alert("Please enter a title/name")
+                            }
+                        }}>
+                            Update
+                        </button>
+                        <input type="text" name="newName" onChange={(event) => {
+                            setUpdateTodo(event.target.value)
+                        }}></input>
+                    </div>
+
+
                 )}
 
                 {/* {friends.todo.map(friend =>
