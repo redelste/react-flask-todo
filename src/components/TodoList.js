@@ -75,6 +75,7 @@ const TodoList = ({ todos, setTodos }) => {
                                             { name: updateTodo, ...restOfAttributes },
                                             ...rest
                                         ])
+                                        console.log(data, "-----------")
                                     })
                             } else {
                                 alert("Please enter a title/name")
@@ -83,6 +84,7 @@ const TodoList = ({ todos, setTodos }) => {
                             Update
                         </button>
                         <input type="text" name="newName" onChange={(event) => {
+                            console.log("Event", event.target.value)
                             setUpdateTodo(event.target.value)
                         }}></input>
                     </div>

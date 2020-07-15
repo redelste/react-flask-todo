@@ -34,9 +34,6 @@ function App() {
       <input type="text" placeholder="title" name="name" value={newTodo} onChange={(event) => {
         setNewTodo(event.target.value)
       }} />
-      <input type="number" placeholder="age" name="age" value={newAge} onChange={(event) => {
-        setNewAge(event.target.value)
-      }}></input>
       <input type="text" placeholder="description" name="description" value={newDescription} onChange={(event)=>{
         setNewDescription(event.target.value)
       }}></input>

@@ -5,6 +5,8 @@ import os
 import json
 from datetime import datetime
 from dotenv import load_dotenv
+from datetime import datetime
+
 
 load_dotenv()
 
@@ -33,7 +35,7 @@ def getAllTodos():
 def addData():
     content = request.get_json()
     print("CONTENT CONTENT CONTENT", content)
-    sqlQuery = f"INSERT INTO todos VALUES ('{content['name']}', {content['age']}, '{content['description']}') ON CONFLICT DO NOTHING;"
+    sqlQuery = f"INSERT INTO todos(name,description,dateCreated) VALUES ('{content['name']}', '{content['description']}', '{datetime.now()}') ON CONFLICT DO NOTHING;"
     cur.execute(sqlQuery)
     conn.commit()
     return content
