@@ -87,6 +87,22 @@ const TodoList = ({ todos, setTodos }) => {
                             console.log("Event", event.target.value)
                             setUpdateTodo(event.target.value)
                         }}></input>
+                        <button onClick={() => {
+                            const requestOptions = {
+                                method: 'DELETE',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ id: todo.id  })
+                            };
+                            fetch(`/api/delete`, requestOptions)
+                                .then(response => response.json())
+                                .then(data => {
+                                    /// destructuring the name, take out the 1 firend and omit it. 
+                                    // return the rest.
+                                    // const { [friend]: omit, ...rest } = friends
+                                    const [{ id = todo.id, ...restOfAttributes }, ...rest] = todos
+                                    setTodos(rest)
+                                });
+                        }}> Delete</button>
                     </div>
 
 

@@ -45,10 +45,10 @@ def addData():
 def deleteData():
     content = request.get_json()
     print("Content", content)
-    sqlQuery = f"DELETE FROM todos WHERE name='{content['title']}';"
+    sqlQuery = f"DELETE FROM todos WHERE id='{content['id']}';"
     cur.execute(sqlQuery)
     conn.commit()
-    return {"success": True, "name": content["title"]}
+    return {"success": True, "id": content["id"]}
 
 
 @app.route('/api/update/<id>', methods=['PUT'])
