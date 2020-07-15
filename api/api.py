@@ -52,7 +52,9 @@ def deleteData():
 @app.route('/api/update/<id>', methods=['PUT'])
 def updateData(id):
     content = request.get_json()
-    newName = content["name"]  # store the new name in a var
+    print("CONTENT", content)
+    newName = content["newName"]  # store the new name in a var
+    print("NEW NAME", newName)
     sqlQuery = f"UPDATE todos SET name = '{newName}' WHERE id='{id}';"
     cur.execute(sqlQuery)
     conn.commit()

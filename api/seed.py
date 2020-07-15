@@ -23,7 +23,7 @@ if __name__ == "__main__":
             dateCreated TIMESTAMP
         );
         """,
-        f"""INSERT INTO todos(name,description,dateCreated) VALUES ('Fix the bugs', 'its fucked', '{datetime.now()}') ON CONFLICT DO NOTHING;"""
+        f"""INSERT INTO todos(name,description,dateCreated) VALUES ('Fix the bugs', 'its broken', '{datetime.now()}') ON CONFLICT DO NOTHING;"""
         f"""INSERT INTO todos(name,description,dateCreated) VALUES ('Fix duplicates', 'its annoying', '{datetime.now()}') ON CONFLICT DO NOTHING;"""
 
     )

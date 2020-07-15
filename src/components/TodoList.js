@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { makeStyles } from '@material-ui/core/styles';
 import clsx from 'clsx';
@@ -69,10 +69,10 @@ const TodoList = ({ todos, setTodos }) => {
                                 fetch(`/api/update/${todo.id}`, requestOptions)
                                     .then(response => response.json())
                                     .then(data => {
-                                        const [{id = todo.id, ...restOfAttributes}, ...rest] = todos
-                                        console.log("REST REST RES",rest)
+                                        const [{ id = todo.id, ...restOfAttributes }, ...rest] = todos
+                                        console.log("REST REST RES", rest)
                                         setTodos([
-                                            { name: updateTodo, ...restOfAttributes},
+                                            { name: updateTodo, ...restOfAttributes },
                                             ...rest
                                         ])
                                     })
