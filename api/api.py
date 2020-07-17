@@ -25,7 +25,6 @@ def get_current_time():
 def getAllTodos():
     cur.execute("SELECT row_to_json(todos) FROM todos;")
     records = cur.fetchall()
-
     response = {'todos': [rs[0] for rs in records]}
     print(response, "response")
     return response
@@ -34,11 +33,16 @@ def getAllTodos():
 @app.route('/api/add', methods=['POST'])
 def addData():
     content = request.get_json()
+    currentTime = datetime.now()
     print("CONTENT CONTENT CONTENT", content)
-    sqlQuery = f"INSERT INTO todos(name,description,dateCreated) VALUES ('{content['name']}', '{content['description']}', '{datetime.now()}') ON CONFLICT DO NOTHING;"
+    sqlQuery = f"INSERT INTO todos(name,description,dateCreated) VALUES ('{content['name']}', '{content['description']}', '{currentTime}') ON CONFLICT DO NOTHING RETURNING id;"
     cur.execute(sqlQuery)
+    inserted_row = cur.fetchone()
+    print(inserted_row)
+    id_of_new_row = inserted_row[0]
+    print("id of new row", id_of_new_row)
     conn.commit()
-    return content
+    return { "id": id_of_new_row, "datecreated": currentTime, **content }
 
 
 @app.route('/api/delete', methods=['DELETE'])

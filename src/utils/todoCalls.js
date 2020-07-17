@@ -1,11 +1,11 @@
 
 
-export const addTodo = (newTodo, newAge, newDescription, cb) => {
-    console.log(newTodo, newAge, newDescription)
+export const addTodo = (newTodo, newDescription, cb) => {
+    console.log(newTodo, newDescription)
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newTodo, age: newAge, description: newDescription })
+        body: JSON.stringify({ name: newTodo, description: newDescription })
     };
     fetch('/api/add', requestOptions)
         .then(response => response.json())

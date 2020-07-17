@@ -12,10 +12,10 @@ function App() {
   //  friends is a dict, and set friends sets the state of this component to contain friends.
   const [todos, setTodos] = useState([])
   const [newTodo, setNewTodo] = useState("")
-  const [newAge, setNewAge] = useState(0)
   const [newDescription, setNewDescription] = useState("")
   useEffect(() => {
     fetch('/api/todos').then(res => res.json()).then(data => {
+      console.log(data.todos)
       setTodos(data.todos)
     })
 
@@ -38,11 +38,11 @@ function App() {
         setNewDescription(event.target.value)
       }}></input>
       <button onClick={() =>
-        addTodo(newTodo, newAge, newDescription, (data) => {
+        addTodo(newTodo, newDescription, (data) => {
           if (newTodo) {
             setTodos([
               ...todos,
-              {name:newTodo, age:newAge, description:newDescription}
+              {id:data.id, datecreated: data.datecreated, name:newTodo, description:newDescription}
             ])
           } else {
             alert("Please enter a name/title")
