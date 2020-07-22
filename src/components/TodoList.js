@@ -5,13 +5,14 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import { red } from '@material-ui/core/colors';
 
-// we destructure props into the syntax {friends}.
+// we destructure props into the syntax {todos}.
 // props are sent to us from App.js
 
 const TodoList = ({ todos, setTodos }) => {
     return (
         <div>
             <ul>
+                {/* accessing the todos from the fetch, passed from the Todo component.  */}
                 {todos
                     .slice()
                     .sort((todo1, todo2) => {

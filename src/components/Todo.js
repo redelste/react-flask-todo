@@ -20,10 +20,10 @@ const Todo = ({ todo, todos, setTodos }) => {
                         // This says "keep the element in filterEDTodos if it's id is not equal todo.id (the one we're trying to remove)", 
                         // same logic goes for Delete
                         const filteredTodos = todos.filter(filterTodo => filterTodo.id != todo.id);
-                        console.log("TODO: ", todo)
-                        console.log("FILTERED TODOS: ", filteredTodos)
+                        // console.log("TODO: ", todo)
+                        // console.log("FILTERED TODOS: ", filteredTodos)
                         const updatedTodo = { ...todo, name: updateInput.current.value }
-                        console.log("UPDATED TODO: ", updatedTodo)
+                        // console.log("UPDATED TODO: ", updatedTodo)
                         setTodos([
                             ...filteredTodos,
                             updatedTodo
@@ -47,7 +47,7 @@ const Todo = ({ todo, todos, setTodos }) => {
                 .then(data => {
                     // This does the same thing as above, except we only want the resultant list.
                     // If the element is equal todo.id, we don't want to keep it. (It's the delete function.)
-                    // We do this because we cannot actually mutate todos. So we create a new list "rest", 
+                    // We do this because we cannot actually mutate todos (it's immutable). So we create a new list "rest", 
                     // which represents the "rest of the todos".
                     const rest = todos.filter(filterTodo => filterTodo.id != todo.id)
                     setTodos(rest)
