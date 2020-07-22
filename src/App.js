@@ -27,31 +27,37 @@ function App() {
       flexGrow: 1,
     }
   }))
+  const handleSubmit = (e, newTodo, newDescription, setTodos) => {
+    e.preventDefault();
+    if (newTodo) {
+      addTodo(newTodo, newDescription, (data) => {
+        setTodos([
+          ...todos,
+          { id: data.id, datecreated: data.datecreated, name: newTodo, description: newDescription }
+        ])
+      })
+    }
+  }
   return (
     <div className="App">
-      
-      <h1> Todo List </h1>
-      <input type="text" placeholder="title" name="name" value={newTodo} onChange={(event) => {
-        setNewTodo(event.target.value)
-      }} />
-      <input type="text" placeholder="description" name="description" value={newDescription} onChange={(event)=>{
-        setNewDescription(event.target.value)
-      }}></input>
-      <button onClick={() =>
-        addTodo(newTodo, newDescription, (data) => {
-          if (newTodo) {
-            setTodos([
-              ...todos,
-              {id:data.id, datecreated: data.datecreated, name:newTodo, description:newDescription}
-            ])
-          } else {
-            alert("Please enter a name/title")
-          }
-        })
 
-      }>
-        Submit
+      <h1> Todo List </h1>
+      <form onSubmit={(e) => handleSubmit(e, newTodo, newDescription, setTodos)}>
+        <label>
+          Title:
+          <input type="text" placeholder="title" name="name" value={newTodo} onChange={(event) => {
+            setNewTodo(event.target.value)
+          }} />
+          Description:
+          <input type="text" placeholder="description" name="description" value={newDescription} onChange={(event) => {
+            setNewDescription(event.target.value)
+          }}></input>
+        </label>
+        <button type="submit">
+          Submit
       </button>
+      </form>
+
       <TodoList todos={todos} setTodos={setTodos}></TodoList>
 
     </div >

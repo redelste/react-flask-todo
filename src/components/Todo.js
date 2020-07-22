@@ -4,7 +4,7 @@ const Todo = ({ todo, todos, setTodos }) => {
     const updateInput = useRef(null);
 
     return <div key={todo.id}>
-        {todo.name}
+        {todo.name} : {todo.description}
         <button onClick={() => {
             const requestOptions = {
                 method: 'PUT',
