@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import TodoList from './components/TodoList'
 import addTodo from './utils/todoCalls';
 import './App.css';
-import { Card, Collapse, makeStyles, Grid, Paper } from '@material-ui/core';
 
 
 
@@ -13,6 +12,9 @@ function App() {
   const [todos, setTodos] = useState([])
   const [newTodo, setNewTodo] = useState("")
   const [newDescription, setNewDescription] = useState("")
+
+
+  
   useEffect(() => {
     fetch('/api/todos').then(res => res.json()).then(data => {
       console.log(data.todos)
@@ -22,11 +24,13 @@ function App() {
 
   }, []);
 
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    }
-  }))
+  // const useStyles = makeStyles((theme) => ({
+  //   root: {
+  //     flexGrow: 1,
+  //   }
+  // }))
+
+
   const handleSubmit = (e, newTodo, newDescription, setTodos) => {
     e.preventDefault();
     if (newTodo) {
@@ -36,7 +40,10 @@ function App() {
           { id: data.id, datecreated: data.datecreated, name: newTodo, description: newDescription }
         ])
       })
+      setNewTodo("");
+      setNewDescription("");
     }
+
   }
   return (
     <div className="App">
@@ -47,6 +54,7 @@ function App() {
           Title:
           <input type="text" placeholder="title" name="name" value={newTodo} onChange={(event) => {
             setNewTodo(event.target.value)
+
           }} />
           Description:
           <input type="text" placeholder="description" name="description" value={newDescription} onChange={(event) => {

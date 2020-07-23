@@ -16,7 +16,7 @@ const TodoList = ({ todos, setTodos }) => {
                 {todos
                     .slice()
                     .sort((todo1, todo2) => {
-                        console.log("sorting", todo1)
+                        // console.log("sorting", todo1)
                         return new Date(todo1.datecreated) - new Date(todo2.datecreated)
                     })
                     .map(todo => 
