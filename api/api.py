@@ -66,6 +66,15 @@ def updateData(id):
     conn.commit()
     return {"success": True}
 
+@app.route('/api/update/description/<id>', methods=['PUT'])
+def updateDescription(id):
+    content = request.get_json()
+    newDescription = content["newDescription"]
+    print("CONTENT", content)
+    sqlQuery = f"UPDATE todos SET description = '{newDescription}' WHERE id='{id}';"
+    cur.execute(sqlQuery)
+    conn.commit()
+    return {"success": True}
 
 # only executes if someone says python api.py
 if __name__ == "__main__":

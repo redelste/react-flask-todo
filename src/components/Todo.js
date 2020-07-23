@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 
 const Todo = ({ todo, todos, setTodos }) => {
     const updateInput = useRef(null);
-
+    const updateDescription = useRef(null);
     return <div key={todo.id}>
         {todo.name} : {todo.description}
         <button onClick={() => {
@@ -33,9 +33,32 @@ const Todo = ({ todo, todos, setTodos }) => {
                 alert("Please enter a title/name")
             }
         }}>
-            Update
+            Update Title
         </button>
         <input ref={updateInput} type="text" name="newName"></input>
+        <button onClick={() => {
+            const requestOptions = {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ newDescription: updateDescription.current.value })
+            };
+            if(updateDescription.current.value){
+                fetch(`/api/update/description/${todo.id}`, requestOptions)
+                .then(response => response.json())
+                .then(data =>{
+                    const filteredTodos = todos.filter(filterTodo => filterTodo.id != todo.id);
+                    const updatedDescription = {...todo , description: updateDescription.current.value}
+                    setTodos([
+                        ...filteredTodos,
+                        updatedDescription
+                    ])
+                })
+            }
+        }
+        }>
+            Update Description
+        </button>
+        <input ref={updateDescription} type="text" name="newDescription"></input>
         <button onClick={() => {
             const requestOptions = {
                 method: 'DELETE',
