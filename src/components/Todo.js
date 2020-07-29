@@ -3,79 +3,87 @@ import React, { useState, useRef } from 'react';
 const Todo = ({ todo, todos, setTodos }) => {
     const updateInput = useRef(null);
     const updateDescription = useRef(null);
-    return <div key={todo.id}>
-        {todo.name} : {todo.description}
-        <button onClick={() => {
-            const requestOptions = {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ newName: updateInput.current.value })
-            };
-            if (updateInput.current.value) {
-                fetch(`/api/update/${todo.id}`, requestOptions)
-                    .then(response => response.json())
-                    .then(data => {
-                        // filterTodo => ... is similar to a map function, such that we are passing in our 
-                        // todos in the "todo.filter", and it checks each individual todo (filterTodo) in todos.
-                        // This says "keep the element in filterEDTodos if it's id is not equal todo.id (the one we're trying to remove)", 
-                        // same logic goes for Delete
-                        const filteredTodos = todos.filter(filterTodo => filterTodo.id != todo.id);
-                        // console.log("TODO: ", todo)
-                        // console.log("FILTERED TODOS: ", filteredTodos)
-                        const updatedTodo = { ...todo, name: updateInput.current.value }
-                        // console.log("UPDATED TODO: ", updatedTodo)
-                        setTodos([
-                            ...filteredTodos,
-                            updatedTodo
-                        ])
-                    })
-            } else {
-                alert("Please enter a title/name")
-            }
-        }}>
-            Update Title
-        </button>
-        <input ref={updateInput} type="text" name="newName"></input>
-        <button onClick={() => {
-            const requestOptions = {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ newDescription: updateDescription.current.value })
-            };
-            if(updateDescription.current.value){
-                fetch(`/api/update/description/${todo.id}`, requestOptions)
+
+
+    const handleSubmit = (e, updateInput, updateDescription) => {
+        e.preventDefault();
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ newName: updateInput.current.value })
+        };
+        if (updateInput.current.value) {
+            fetch(`/api/update/${todo.id}`, requestOptions)
                 .then(response => response.json())
-                .then(data =>{
+                .then(data => {
+                    // filterTodo => ... is similar to a map function, such that we are passing in our 
+                    // todos in the "todo.filter", and it checks each individual todo (filterTodo) in todos.
+                    // This says "keep the element in filterEDTodos if it's id is not equal todo.id (the one we're trying to remove)", 
+                    // same logic goes for Delete
                     const filteredTodos = todos.filter(filterTodo => filterTodo.id != todo.id);
-                    const updatedDescription = {...todo , description: updateDescription.current.value}
+                    // console.log("TODO: ", todo)
+                    // console.log("FILTERED TODOS: ", filteredTodos)
+                    const updatedTodo = { ...todo, name: updateInput.current.value }
+                    // console.log("UPDATED TODO: ", updatedTodo)
+                    setTodos([
+                        ...filteredTodos,
+                        updatedTodo
+                    ])
+                    updateInput.current.value = "";
+                })
+        } 
+        const updateOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ newDescription: updateDescription.current.value })
+        };
+        if (updateDescription.current.value) {
+            fetch(`/api/update/description/${todo.id}`, updateOptions)
+                .then(response => response.json())
+                .then(data => {
+                    const filteredTodos = todos.filter(filterTodo => filterTodo.id != todo.id);
+                    const updatedDescription = { ...todo, description: updateDescription.current.value }
                     setTodos([
                         ...filteredTodos,
                         updatedDescription
                     ])
+                    updateDescription.current.value = "";
                 })
-            }
         }
-        }>
-            Update Description
-        </button>
-        <input ref={updateDescription} type="text" name="newDescription"></input>
-        <button onClick={() => {
-            const requestOptions = {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id: todo.id })
-            };
-            fetch(`/api/delete`, requestOptions)
-                .then(response => response.json())
-                .then(data => {
-                    // This does the same thing as above, except we only want the resultant list.
-                    // If the element is equal todo.id, we don't want to keep it. (It's the delete function.)
-                    // We do this because we cannot actually mutate todos (it's immutable). So we create a new list "rest", 
-                    // which represents the "rest of the todos".
-                    const rest = todos.filter(filterTodo => filterTodo.id != todo.id)
-                    setTodos(rest)
-                });
-        }}> Delete</button>
+
+        // updateDescription.current.reset();
+    }
+    return <div key={todo.id}>
+        {todo.name} : {todo.description}
+
+        <form onSubmit={(e) => handleSubmit(e, updateInput, updateDescription)}>
+            <button type="submit">
+                Update Title
+            </button>
+            <input ref={updateInput} type="text" name="newName"></input>
+            <button>
+                Update Description
+            </button>
+            <input ref={updateDescription} type="text" name="newDescription"></input>
+            <button onClick={() => {
+                const requestOptions = {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: todo.id })
+                };
+                fetch(`/api/delete`, requestOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        // This does the same thing as above, except we only want the resultant list.
+                        // If the element is equal todo.id, we don't want to keep it. (It's the delete function.)
+                        // We do this because we cannot actually mutate todos (it's immutable). So we create a new list "rest", 
+                        // which represents the "rest of the todos".
+                        const rest = todos.filter(filterTodo => filterTodo.id != todo.id)
+                        setTodos(rest)
+                    });
+            }}> Delete</button>
+
+        </form>
     </div>
 
 }
