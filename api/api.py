@@ -34,13 +34,11 @@ def getAllTodos():
 def addData():
     content = request.get_json()
     currentTime = datetime.now()
-    # print("CONTENT CONTENT CONTENT", content)
-    sqlQuery = f"INSERT INTO todos(name,description,dateCreated) VALUES ('{content['name']}', '{content['description']}', '{currentTime}') ON CONFLICT DO NOTHING RETURNING id;"
-    cur.execute(sqlQuery)
+    insertVals = (content['name'], content['description'])
+    sqlQuery = f"INSERT INTO todos(name,description,dateCreated) VALUES (%s,%s, '{currentTime}') ON CONFLICT DO NOTHING RETURNING id;"
+    cur.execute(sqlQuery,insertVals)
     inserted_row = cur.fetchone()
-    # print(inserted_row)
     id_of_new_row = inserted_row[0]
-    # print("id of new row", id_of_new_row)
     conn.commit()
     return { "id": id_of_new_row, "datecreated": currentTime, **content }
 
@@ -58,21 +56,19 @@ def deleteData():
 @app.route('/api/update/<id>', methods=['PUT'])
 def updateData(id):
     content = request.get_json()
-    # print("CONTENT", content)
-    newName = content["newName"]  # store the new name in a var
-    # print("NEW NAME", newName)
-    sqlQuery = f"UPDATE todos SET name = '{newName}' WHERE id='{id}';"
-    cur.execute(sqlQuery)
+    newName = (content["newName"])  # store the new name in a var
+    sqlQuery = f"UPDATE todos SET name = %s WHERE id='{id}';"
+    # need to pass a tuple to curser.execute.
+    cur.execute(sqlQuery, (newName,))
     conn.commit()
     return {"success": True}
 
 @app.route('/api/update/description/<id>', methods=['PUT'])
 def updateDescription(id):
     content = request.get_json()
-    newDescription = content["newDescription"]
-    print("CONTENT", content)
-    sqlQuery = f"UPDATE todos SET description = '{newDescription}' WHERE id='{id}';"
-    cur.execute(sqlQuery)
+    newDescription = (content["newDescription"])
+    sqlQuery = f"UPDATE todos SET description = %s WHERE id='{id}';"
+    cur.execute(sqlQuery, (newDescription,))
     conn.commit()
     return {"success": True}
 
