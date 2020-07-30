@@ -1,70 +1,51 @@
-import React, { useState, useRef } from 'react';
-
+import React, { useRef } from 'react';
+import { updateName, updateDescription } from '../utils/todoCalls'
 const Todo = ({ todo, todos, setTodos }) => {
-    const updateInput = useRef(null);
-    const updateDescription = useRef(null);
+    const updateNameInput = useRef(null);
+    const updateDescriptionInput = useRef(null);
 
 
-    const handleSubmit = (e, updateInput, updateDescription) => {
+    const handleSubmit = (e, updateNameInput, updateDescriptionInput) => {
         e.preventDefault();
-        const requestOptions = {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ newName: updateInput.current.value })
-        };
-        if (updateInput.current.value) {
-            fetch(`/api/update/${todo.id}`, requestOptions)
-                .then(response => response.json())
-                .then(data => {
-                    // filterTodo => ... is similar to a map function, such that we are passing in our 
-                    // todos in the "todo.filter", and it checks each individual todo (filterTodo) in todos.
-                    // This says "keep the element in filterEDTodos if it's id is not equal todo.id (the one we're trying to remove)", 
-                    // same logic goes for Delete
-                    const filteredTodos = todos.filter(filterTodo => filterTodo.id != todo.id);
-                    // console.log("TODO: ", todo)
-                    // console.log("FILTERED TODOS: ", filteredTodos)
-                    const updatedTodo = { ...todo, name: updateInput.current.value }
-                    // console.log("UPDATED TODO: ", updatedTodo)
-                    setTodos([
-                        ...filteredTodos,
-                        updatedTodo
-                    ])
-                    updateInput.current.value = "";
-                })
-        } 
-        const updateOptions = {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ newDescription: updateDescription.current.value })
-        };
-        if (updateDescription.current.value) {
-            fetch(`/api/update/description/${todo.id}`, updateOptions)
-                .then(response => response.json())
-                .then(data => {
-                    const filteredTodos = todos.filter(filterTodo => filterTodo.id != todo.id);
-                    const updatedDescription = { ...todo, description: updateDescription.current.value }
-                    setTodos([
-                        ...filteredTodos,
-                        updatedDescription
-                    ])
-                    updateDescription.current.value = "";
-                })
+        if (updateNameInput.current.value) {
+            updateName(todo.id, updateNameInput.current.value, (data) => {
+
+                // state management --> need to refactor for redux
+                const filteredTodos = todos.filter(filterTodo => filterTodo.id !== todo.id);
+                const updatedTodo = { ...todo, name: updateNameInput.current.value }
+                setTodos([
+                    ...filteredTodos,
+                    updatedTodo
+                ])
+                updateNameInput.current.value = "";
+            })
         }
 
-        // updateDescription.current.reset();
+        if (updateDescriptionInput.current.value) {
+            updateDescription(todo.id, updateDescriptionInput.current.value, (data) => {
+                const filteredTodos = todos.filter(filterTodo => filterTodo.id !== todo.id);
+                const updatedDescription = { ...todo, description: updateDescriptionInput.current.value }
+                setTodos([
+                    ...filteredTodos,
+                    updatedDescription
+                ])
+                updateDescriptionInput.current.value = "";
+            })
+        }
     }
+
     return <div key={todo.id}>
         {todo.name} : {todo.description}
 
-        <form onSubmit={(e) => handleSubmit(e, updateInput, updateDescription)}>
+        <form onSubmit={(e) => handleSubmit(e, updateNameInput, updateDescriptionInput)}>
             <button type="submit">
                 Update Title
             </button>
-            <input ref={updateInput} type="text" name="newName"></input>
+            <input ref={updateNameInput} type="text" name="newName"></input>
             <button>
                 Update Description
             </button>
-            <input ref={updateDescription} type="text" name="newDescription"></input>
+            <input ref={updateDescriptionInput} type="text" name="newDescription"></input>
             <button onClick={() => {
                 const requestOptions = {
                     method: 'DELETE',
@@ -78,7 +59,7 @@ const Todo = ({ todo, todos, setTodos }) => {
                         // If the element is equal todo.id, we don't want to keep it. (It's the delete function.)
                         // We do this because we cannot actually mutate todos (it's immutable). So we create a new list "rest", 
                         // which represents the "rest of the todos".
-                        const rest = todos.filter(filterTodo => filterTodo.id != todo.id)
+                        const rest = todos.filter(filterTodo => filterTodo.id !== todo.id)
                         setTodos(rest)
                     });
             }}> Delete</button>

@@ -1,9 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import Todo from './Todo';
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 
 
-import { red } from '@material-ui/core/colors';
+// import { red } from '@material-ui/core/colors';
 
 // we destructure props into the syntax {todos}.
 // props are sent to us from App.js
@@ -16,7 +16,6 @@ const TodoList = ({ todos, setTodos }) => {
                 {todos
                     .slice()
                     .sort((todo1, todo2) => {
-                        // console.log("sorting", todo1)
                         return new Date(todo1.datecreated) - new Date(todo2.datecreated)
                     })
                     .map(todo => 

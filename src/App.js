@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TodoList from './components/TodoList'
-import addTodo from './utils/todoCalls';
+import { addTodo } from './utils/todoCalls';
 import './App.css';
 
 
@@ -17,7 +17,6 @@ function App() {
   
   useEffect(() => {
     fetch('/api/todos').then(res => res.json()).then(data => {
-      console.log(data.todos)
       setTodos(data.todos)
     })
 
