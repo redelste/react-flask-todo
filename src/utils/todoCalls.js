@@ -20,11 +20,11 @@ const addTodo = (newTodo, newDescription, cb) => {
 
 
 
-const updateName = (todoId, updatedName, cb) => {
+const updateName = (todoId, updatedName, updatedDescription, cb) => {
     const updateOptions = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ newName: updatedName })
+        body: JSON.stringify({ newName: updatedName, newDescription: updatedDescription })
     };
 
     fetch(`/api/update/${todoId}`, updateOptions)
@@ -34,23 +34,23 @@ const updateName = (todoId, updatedName, cb) => {
         })
 }
 
-const updateDescription = (todoId, updatedDescription, cb) => {
-    const updateDescriptionOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ newDescription: updatedDescription })
-    };
-    fetch(`/api/update/description/${todoId}`, updateDescriptionOptions)
-        .then(response => response.json())
-        .then(data => {
-            cb(data)
-        })
+// const updateDescription = (todoId, updatedDescription, cb) => {
+//     const updateDescriptionOptions = {
+//         method: 'PUT',
+//         headers: { 'Content-Type': 'application/json' },
+//         body: JSON.stringify({ newDescription: updatedDescription })
+//     };
+//     fetch(`/api/update/description/${todoId}`, updateDescriptionOptions)
+//         .then(response => response.json())
+//         .then(data => {
+//             cb(data)
+//         })
 
-}
+// }
 
 
 export {
     addTodo,
     updateName,
-    updateDescription
+    // updateDescription
 }

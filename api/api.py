@@ -5,7 +5,6 @@ import os
 import json
 from datetime import datetime
 from dotenv import load_dotenv
-from datetime import datetime
 
 
 load_dotenv()
@@ -32,8 +31,9 @@ def getAllTodos():
 
 @app.route('/api/add', methods=['POST'])
 def addData():
+    now = datetime.now()
     content = request.get_json()
-    currentTime = datetime.now()
+    currentTime = now.strftime("%m/%d/%Y %H:%M")
     insertVals = (content['name'], content['description'])
     sqlQuery = f"INSERT INTO todos(name,description,dateCreated) VALUES (%s,%s, '{currentTime}') ON CONFLICT DO NOTHING RETURNING id;"
     cur.execute(sqlQuery,insertVals)
@@ -55,12 +55,35 @@ def deleteData():
 
 @app.route('/api/update/<id>', methods=['PUT'])
 def updateData(id):
-    content = request.get_json()
+    content = request.get_json()    # sqlQuery = f"UPDATE todos SET name = %s WHERE id='{id}';"
     newName = (content["newName"])  # store the new name in a var
-    sqlQuery = f"UPDATE todos SET name = %s WHERE id='{id}';"
+    newDescription = (content["newDescription"])
+    # sqlQuery = f"UPDATE todos SET name = %s WHERE id='{id}';"
     # need to pass a tuple to curser.execute.
-    cur.execute(sqlQuery, (newName,))
-    conn.commit()
+    print("hitting updatedat", content)
+
+    if newName == "" and newDescription != "":
+        print("NEW NAME IS EMPTY", content)
+        sqlQuery = f"UPDATE todos SET description = %s WHERE id='{id}';"
+        cur.execute(sqlQuery, (newDescription,))
+        conn.commit()
+        return {"success": True}
+
+    elif newName != "" and newDescription == "":
+        print("NEW NAME IS NOT EMPTY")
+        sqlQuery = f"UPDATE todos SET name = %s WHERE id='{id}';"
+        cur.execute(sqlQuery, (newName,))
+        conn.commit()
+        return {"success": True}
+    elif newName != "" and newDescription !="":
+        print("NEITHER ARE EMPTY")
+        sqlQuery = f"UPDATE todos SET name = %s, description = %s WHERE id='{id}';"
+        cur.execute(sqlQuery, (newName,newDescription,))
+        conn.commit()
+        return {"success": True}
+    elif newName == '' and newDescription == '':
+        print("BOTH ARE EMPTY")
+        return {"failure": False}
     return {"success": True}
 
 @app.route('/api/update/description/<id>', methods=['PUT'])
@@ -84,3 +107,4 @@ if __name__ == "__main__":
     cur = conn.cursor()
 
     app.run(port=5000)
+
