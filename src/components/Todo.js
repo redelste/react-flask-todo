@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { updateName } from '../utils/todoCalls'
+import { updateTodo } from '../utils/todoCalls'
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardMedia from "@material-ui/core/CardMedia";
@@ -19,7 +19,8 @@ const useStyles = makeStyles({
         boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
         "&:hover": {
             boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)"
-        }
+        },
+        height: "100%"
     },
     media: {
         paddingTop: "56.25%"
@@ -48,15 +49,18 @@ const Todo = ({ todo, todos, setTodos }) => {
 
     const handleSubmit = (e, updateNameInput, updateDescriptionInput) => {
         e.preventDefault();
-        updateName(todo.id, updateNameInput.current.value, updateDescriptionInput.current.value, (data) => {
+        updateTodo(todo.id, updateNameInput.current.value, updateDescriptionInput.current.value, (data) => {
             // state management --> need to refactor for redux
             const filteredTodos = todos.filter(filterTodo => filterTodo.id !== todo.id);
-            const updatedTodo = { ...todo, name: updateNameInput.current.value, description: updateDescriptionInput.current.value }
+            const updatedTodo = {
+                ...todo,
+                name: updateNameInput.current.value || todo.name,
+                description: updateDescriptionInput.current.value || todo.description
+            }
             setTodos([
                 ...filteredTodos,
                 updatedTodo
             ])
-            console.log("UPDATE NAME INPUT", updateNameInput)
             if (updateNameInput.current.value !== "" || updateNameInput.current.value !== null) {
                 updateNameInput.current.value = "";
             }
@@ -64,17 +68,6 @@ const Todo = ({ todo, todos, setTodos }) => {
                 updateDescriptionInput.current.value = "";
             }
         })
-
-
-        // updateDescription(todo.id, updateDescriptionInput.current.value, (data) => {
-        //     const filteredTodos = todos.filter(filterTodo => filterTodo.id !== todo.id);
-        //     const updatedDescription = { ...todo, description: updateDescriptionInput.current.value }
-        //     setTodos([
-        //         ...filteredTodos,
-        //         updatedDescription
-        //     ])
-        //     updateDescriptionInput.current.value = "";
-        // })
 
     }
 
@@ -114,26 +107,24 @@ const Todo = ({ todo, todos, setTodos }) => {
                         </button>
                         <input ref={updateNameInput} type="text" name="newName"></input>
                         <input ref={updateDescriptionInput} type="text" name="newDescription"></input>
-                        <button onClick={() => {
-                            const requestOptions = {
-                                method: 'DELETE',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ id: todo.id })
-                            };
-                            fetch(`/api/delete`, requestOptions)
-                                .then(response => response.json())
-                                .then(data => {
-                                    // This does the same thing as above, except we only want the resultant list.
-                                    // If the element is equal todo.id, we don't want to keep it. (It's the delete function.)
-                                    // We do this because we cannot actually mutate todos (it's immutable). So we create a new list "rest", 
-                                    // which represents the "rest of the todos".
-                                    const rest = todos.filter(filterTodo => filterTodo.id !== todo.id)
-                                    setTodos(rest)
-                                });
-                        }}> Delete</button>
-
                     </form>
-
+                    <button onClick={() => {
+                        const requestOptions = {
+                            method: 'DELETE',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ id: todo.id })
+                        };
+                        fetch(`/api/delete`, requestOptions)
+                            .then(response => response.json())
+                            .then(data => {
+                                // This does the same thing as above, except we only want the resultant list.
+                                // If the element is equal todo.id, we don't want to keep it. (It's the delete function.)
+                                // We do this because we cannot actually mutate todos (it's immutable). So we create a new list "rest", 
+                                // which represents the "rest of the todos".
+                                const rest = todos.filter(filterTodo => filterTodo.id !== todo.id)
+                                setTodos(rest)
+                            });
+                    }}> Delete</button>
                 </Typography>
             </CardContent>
         </Card>

@@ -63,26 +63,22 @@ def updateData(id):
     print("hitting updatedat", content)
 
     if newName == "" and newDescription != "":
-        print("NEW NAME IS EMPTY", content)
-        sqlQuery = f"UPDATE todos SET description = %s WHERE id='{id}';"
+        sqlQuery = f"UPDATE todos SET description = (%s) WHERE id='{id}';"
         cur.execute(sqlQuery, (newDescription,))
         conn.commit()
         return {"success": True}
 
     elif newName != "" and newDescription == "":
-        print("NEW NAME IS NOT EMPTY")
-        sqlQuery = f"UPDATE todos SET name = %s WHERE id='{id}';"
+        sqlQuery = f"UPDATE todos SET name = (%s) WHERE id='{id}';"
         cur.execute(sqlQuery, (newName,))
         conn.commit()
         return {"success": True}
     elif newName != "" and newDescription !="":
-        print("NEITHER ARE EMPTY")
-        sqlQuery = f"UPDATE todos SET name = %s, description = %s WHERE id='{id}';"
+        sqlQuery = f"UPDATE todos SET name = (%s), description = (%s) WHERE id='{id}';"
         cur.execute(sqlQuery, (newName,newDescription,))
         conn.commit()
         return {"success": True}
     elif newName == '' and newDescription == '':
-        print("BOTH ARE EMPTY")
         return {"failure": False}
     return {"success": True}
 
