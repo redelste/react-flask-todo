@@ -60,26 +60,18 @@ def updateData(id):
     newDescription = (content["newDescription"])
     # sqlQuery = f"UPDATE todos SET name = %s WHERE id='{id}';"
     # need to pass a tuple to curser.execute.
-    print("hitting updatedat", content)
-
     if newName == "" and newDescription != "":
         sqlQuery = f"UPDATE todos SET description = (%s) WHERE id='{id}';"
         cur.execute(sqlQuery, (newDescription,))
-        conn.commit()
-        return {"success": True}
-
     elif newName != "" and newDescription == "":
         sqlQuery = f"UPDATE todos SET name = (%s) WHERE id='{id}';"
         cur.execute(sqlQuery, (newName,))
-        conn.commit()
-        return {"success": True}
     elif newName != "" and newDescription !="":
         sqlQuery = f"UPDATE todos SET name = (%s), description = (%s) WHERE id='{id}';"
         cur.execute(sqlQuery, (newName,newDescription,))
-        conn.commit()
-        return {"success": True}
     elif newName == '' and newDescription == '':
         return {"failure": False}
+    conn.commit()
     return {"success": True}
 
 @app.route('/api/update/description/<id>', methods=['PUT'])
