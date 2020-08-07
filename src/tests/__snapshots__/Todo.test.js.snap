@@ -1,0 +1,77 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TodoList renders correctly 1`] = `
+<div
+  className={
+    Object {
+      "card": "makeStyles-card-2",
+      "content": "makeStyles-content-4",
+      "divider": "makeStyles-divider-5",
+      "heading": "makeStyles-heading-6",
+      "media": "makeStyles-media-3",
+      "root": "makeStyles-root-1",
+      "subheading": "makeStyles-subheading-7",
+    }
+  }
+>
+  <div
+    className="MuiPaper-root MuiCard-root makeStyles-card-2 MuiPaper-elevation1 MuiPaper-rounded"
+  >
+    <div
+      className="MuiCardMedia-root makeStyles-media-3"
+      style={
+        Object {
+          "backgroundImage": "url(\\"https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg\\")",
+        }
+      }
+    />
+    <div
+      className="MuiCardContent-root makeStyles-content-4"
+    >
+      <h6
+        className="MuiTypography-root MuiTypography--heading MuiTypography-h6 MuiTypography-gutterBottom"
+      >
+        a test to 
+      </h6>
+      <hr
+        className="MuiDivider-root makeStyles-divider-5 MuiDivider-light"
+      />
+      <span
+        className="MuiTypography-root MuiTypography--heading MuiTypography-caption MuiTypography-gutterBottom"
+      >
+        2020-08-06T13:56:00
+      </span>
+      <span
+        className="MuiTypography-root MuiTypography--subheading MuiTypography-caption"
+      >
+        <hr
+          className="MuiDivider-root makeStyles-divider-5 MuiDivider-light"
+        />
+        testing
+        <form
+          onSubmit={[Function]}
+        >
+          <button
+            type="submit"
+          >
+            Update
+          </button>
+          <input
+            name="newName"
+            type="text"
+          />
+          <input
+            name="newDescription"
+            type="text"
+          />
+        </form>
+        <button
+          onClick={[Function]}
+        >
+           Delete
+        </button>
+      </span>
+    </div>
+  </div>
+</div>
+`;

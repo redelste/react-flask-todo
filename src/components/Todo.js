@@ -51,6 +51,8 @@ const Todo = ({ todo, todos, setTodos }) => {
         e.preventDefault();
         updateTodo(todo.id, updateNameInput.current.value, updateDescriptionInput.current.value, (data) => {
             // state management --> need to refactor for redux
+            console.log(todo)
+            console.log(todos)
             const filteredTodos = todos.filter(filterTodo => filterTodo.id !== todo.id);
             const updatedTodo = {
                 ...todo,
