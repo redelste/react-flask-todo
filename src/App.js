@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TodoList from './components/TodoList'
-import { addTodo } from './utils/todoCalls';
+import { addTodo, getTodos } from './utils/todoCalls';
 import { Typography, TextField, Button } from '@material-ui/core'
 // import { makeStyles, useTheme, ThemeProvider } from "@material-ui/styles";
 // import SaveIcon from '@material-ui/icons/Save';
@@ -41,12 +41,12 @@ function App() {
 
 
   useEffect(() => {
-    fetch('/api/todos').then(res => res.json()).then(data => {
+    getTodos((data) => {
       setTodos(data.todos)
     })
-
-
   }, []);
+
+
   const handleSubmit = (e, newTodo, newDescription, setTodos) => {
     e.preventDefault();
     if (newTodo) {

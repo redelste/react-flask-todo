@@ -1,5 +1,11 @@
 
-
+const getTodos = (cb) => {
+    fetch('/api/todos')
+        .then(res => res.json())
+        .then(data => {
+            cb(data)
+        })
+}
 const addTodo = (newTodo, newDescription, cb) => {
     const addOptions = {
         method: 'POST',
@@ -37,4 +43,5 @@ const updateTodo = (todoId, updatedName, updatedDescription, cb) => {
 export {
     addTodo,
     updateTodo,
+    getTodos
 }
