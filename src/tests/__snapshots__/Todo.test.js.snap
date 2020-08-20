@@ -4,29 +4,35 @@ exports[`Each todo renders correctly 1`] = `
 <div
   className={
     Object {
+      "cancelIcon": "makeStyles-cancelIcon-10",
       "card": "makeStyles-card-2",
-      "content": "makeStyles-content-4",
-      "divider": "makeStyles-divider-5",
-      "heading": "makeStyles-heading-6",
-      "media": "makeStyles-media-3",
+      "content": "makeStyles-content-3",
+      "divider": "makeStyles-divider-4",
+      "expand": "makeStyles-expand-8",
+      "expandOpen": "makeStyles-expandOpen-9",
+      "heading": "makeStyles-heading-5",
       "root": "makeStyles-root-1",
-      "subheading": "makeStyles-subheading-7",
+      "shapeCircle": "makeStyles-shapeCircle-7",
+      "subheading": "makeStyles-subheading-6",
     }
   }
 >
   <div
     className="MuiPaper-root MuiCard-root makeStyles-card-2 MuiPaper-elevation1 MuiPaper-rounded"
   >
+    <svg
+      aria-hidden={true}
+      className="MuiSvgIcon-root makeStyles-cancelIcon-10"
+      focusable="false"
+      onClick={[Function]}
+      viewBox="0 0 24 24"
+    >
+      <path
+        d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"
+      />
+    </svg>
     <div
-      className="MuiCardMedia-root makeStyles-media-3"
-      style={
-        Object {
-          "backgroundImage": "url(\\"https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg\\")",
-        }
-      }
-    />
-    <div
-      className="MuiCardContent-root makeStyles-content-4"
+      className="MuiCardContent-root makeStyles-content-3"
     >
       <h6
         className="MuiTypography-root MuiTypography--heading MuiTypography-h6 MuiTypography-gutterBottom"
@@ -34,7 +40,7 @@ exports[`Each todo renders correctly 1`] = `
         a test to 
       </h6>
       <hr
-        className="MuiDivider-root makeStyles-divider-5 MuiDivider-light"
+        className="MuiDivider-root makeStyles-divider-4 MuiDivider-light"
       />
       <span
         className="MuiTypography-root MuiTypography--heading MuiTypography-caption MuiTypography-gutterBottom"
@@ -45,108 +51,57 @@ exports[`Each todo renders correctly 1`] = `
         className="MuiTypography-root MuiTypography--subheading MuiTypography-caption"
       >
         <hr
-          className="MuiDivider-root makeStyles-divider-5 MuiDivider-light"
+          className="MuiDivider-root makeStyles-divider-4 MuiDivider-light"
         />
-        testing
-        <form
-          onSubmit={[Function]}
-        >
-          <button
-            type="submit"
-          >
-            Update
-          </button>
-          <input
-            name="newName"
-            type="text"
-          />
-          <input
-            name="newDescription"
-            type="text"
-          />
-        </form>
-        <button
-          onClick={[Function]}
-        >
-           Delete
-        </button>
       </span>
     </div>
-  </div>
-</div>
-`;
-
-exports[`TodoList renders correctly 1`] = `
-<div
-  className={
-    Object {
-      "card": "makeStyles-card-2",
-      "content": "makeStyles-content-4",
-      "divider": "makeStyles-divider-5",
-      "heading": "makeStyles-heading-6",
-      "media": "makeStyles-media-3",
-      "root": "makeStyles-root-1",
-      "subheading": "makeStyles-subheading-7",
-    }
-  }
->
-  <div
-    className="MuiPaper-root MuiCard-root makeStyles-card-2 MuiPaper-elevation1 MuiPaper-rounded"
-  >
     <div
-      className="MuiCardMedia-root makeStyles-media-3"
-      style={
-        Object {
-          "backgroundImage": "url(\\"https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg\\")",
-        }
-      }
-    />
-    <div
-      className="MuiCardContent-root makeStyles-content-4"
+      className="MuiCardContent-root"
     >
-      <h6
-        className="MuiTypography-root MuiTypography--heading MuiTypography-h6 MuiTypography-gutterBottom"
+      <p
+        className="MuiTypography-root MuiTypography-body2 MuiTypography-colorTextSecondary"
       >
-        a test to 
-      </h6>
-      <hr
-        className="MuiDivider-root makeStyles-divider-5 MuiDivider-light"
-      />
-      <span
-        className="MuiTypography-root MuiTypography--heading MuiTypography-caption MuiTypography-gutterBottom"
-      >
-        2020-08-06T13:56:00
-      </span>
-      <span
-        className="MuiTypography-root MuiTypography--subheading MuiTypography-caption"
-      >
-        <hr
-          className="MuiDivider-root makeStyles-divider-5 MuiDivider-light"
-        />
         testing
-        <form
-          onSubmit={[Function]}
+      </p>
+    </div>
+    <div
+      className="MuiCardActions-root"
+    >
+      <button
+        aria-expanded={false}
+        aria-label="show more"
+        className="MuiButtonBase-root MuiIconButton-root makeStyles-expand-8"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onDragLeave={[Function]}
+        onFocus={[Function]}
+        onKeyDown={[Function]}
+        onKeyUp={[Function]}
+        onMouseDown={[Function]}
+        onMouseLeave={[Function]}
+        onMouseUp={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        tabIndex={0}
+        type="button"
+      >
+        <span
+          className="MuiIconButton-label"
         >
-          <button
-            type="submit"
+          <svg
+            aria-hidden={true}
+            className="MuiSvgIcon-root"
+            focusable="false"
+            viewBox="0 0 24 24"
           >
-            Update
-          </button>
-          <input
-            name="newName"
-            type="text"
-          />
-          <input
-            name="newDescription"
-            type="text"
-          />
-        </form>
-        <button
-          onClick={[Function]}
-        >
-           Delete
-        </button>
-      </span>
+            <path
+              d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"
+            />
+          </svg>
+        </span>
+      </button>
     </div>
   </div>
 </div>

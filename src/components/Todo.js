@@ -1,33 +1,37 @@
 import React, { useRef } from 'react';
-import { updateTodo } from '../utils/todoCalls'
+import { updateTodo, deleteTodo } from '../utils/todoCalls'
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia";
 import CardContent from "@material-ui/core/CardContent";
 import Divider from "@material-ui/core/Divider";
 import Typography from "@material-ui/core/Typography";
+import clsx from 'clsx';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import IconButton from '@material-ui/core/IconButton';
+import CardActions from '@material-ui/core/CardActions';
+import CancelIcon from '@material-ui/icons/Cancel';
 
-
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
     },
     card: {
-        maxWidth: 300,
-        margin: "auto",
+        maxWidth: 500,
+        margin: "20px auto",
         transition: "0.3s",
         boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
         "&:hover": {
             boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)"
         },
-        height: "100%"
+        height: "100%",
+        padding: "20px"
+
     },
-    media: {
-        paddingTop: "56.25%"
-    },
+
     content: {
         textAlign: "left",
-        padding: 3
+        padding: 3,
     },
     divider: {
         margin: `10px`
@@ -38,21 +42,41 @@ const useStyles = makeStyles({
     subheading: {
         lineHeight: 1.8
     },
+    shapeCircle: {
 
-});
+        borderRadius: '50%',
+    },
+    expand: {
+        transform: 'rotate(0deg)',
+        marginLeft: 'auto',
+        transition: theme.transitions.create('transform', {
+            duration: theme.transitions.duration.shortest,
+        }),
+    },
+    expandOpen: {
+        transform: 'rotate(180deg)',
+    },
+    cancelIcon: {
+        justifyContent: "right"
+    }
+}));
 
 
 const Todo = ({ todo, todos, setTodos }) => {
     const updateNameInput = useRef(null);
     const updateDescriptionInput = useRef(null);
     const classes = useStyles();
+    const [expanded, setExpanded] = React.useState(false);
+
+    const handleExpandClick = () => {
+        setExpanded(!expanded);
+    };
+
 
     const handleSubmit = (e, updateNameInput, updateDescriptionInput) => {
         e.preventDefault();
         updateTodo(todo.id, updateNameInput.current.value, updateDescriptionInput.current.value, (data) => {
             // state management --> need to refactor for redux
-            console.log(todo)
-            console.log(todos)
             const filteredTodos = todos.filter(filterTodo => filterTodo.id !== todo.id);
             const updatedTodo = {
                 ...todo,
@@ -71,24 +95,33 @@ const Todo = ({ todo, todos, setTodos }) => {
             }
         })
 
+
     }
 
     return <div key={todo.id} className={classes}>
         <Card className={classes.card}>
-            <CardMedia
-                className={classes.media}
-                image={
-                    "https://image.freepik.com/free-photo/river-foggy-mountains-landscape_1204-511.jpg"
-                }
-            />
+            <CancelIcon className={classes.cancelIcon} onClick={() => {
+                deleteTodo(todo.id, (data) => {
+                    // This does the same thing as above, except we only want the resultant list.
+                    // If the element is equal todo.id, we don't want to keep it. (It's the delete function.)
+                    // We do this because we cannot actually mutate todos (it's immutable). So we create a new list "rest", 
+                    // which represents the "rest of the todos".
+                    const rest = todos.filter(filterTodo => filterTodo.id !== todo.id)
+                    setTodos(rest)
+                })
+            }}>
+            </CancelIcon>
             <CardContent className={classes.content}>
+
                 <Typography
                     className={"MuiTypography--heading"}
                     variant={"h6"}
                     gutterBottom
                 >
                     {todo.name}
+
                 </Typography>
+
                 <Divider className={classes.divider} light />
                 <Typography
                     className={"MuiTypography--heading"}
@@ -102,35 +135,38 @@ const Todo = ({ todo, todos, setTodos }) => {
                     variant={"caption"}
                 >
                     <Divider className={classes.divider} light />
-                    {todo.description}
-                    <form onSubmit={(e) => handleSubmit(e, updateNameInput, updateDescriptionInput)}>
-                        <button type="submit">
-                            Update
-                        </button>
-                        <input ref={updateNameInput} type="text" name="newName"></input>
-                        <input ref={updateDescriptionInput} type="text" name="newDescription"></input>
-                    </form>
-                    <button onClick={() => {
-                        const requestOptions = {
-                            method: 'DELETE',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ id: todo.id })
-                        };
-                        fetch(`/api/delete`, requestOptions)
-                            .then(response => response.json())
-                            .then(data => {
-                                // This does the same thing as above, except we only want the resultant list.
-                                // If the element is equal todo.id, we don't want to keep it. (It's the delete function.)
-                                // We do this because we cannot actually mutate todos (it's immutable). So we create a new list "rest", 
-                                // which represents the "rest of the todos".
-                                const rest = todos.filter(filterTodo => filterTodo.id !== todo.id)
-                                setTodos(rest)
-                            });
-                    }}> Delete</button>
+
                 </Typography>
             </CardContent>
+            <CardContent>
+                <Typography variant="body2" color="textSecondary" component="p">
+                    {todo.description}
+                </Typography>
+            </CardContent>
+            <CardActions disableSpacing>
+                <IconButton
+                    className={clsx(classes.expand, {
+                        [classes.expandOpen]: expanded,
+                    })}
+                    onClick={handleExpandClick}
+                    aria-expanded={expanded}
+                    aria-label="show more"
+                >
+                    <ExpandMoreIcon />
+                </IconButton>
+            </CardActions>
+            <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <CardContent>
+                    <form onSubmit={(e) => handleSubmit(e, updateNameInput, updateDescriptionInput)}>
+                        <button type="submit" style={{ display: "none" }}>Update</button>
+                        <input ref={updateNameInput} type="text" placeholder="Title" name="newName"></input>
+                        <input ref={updateDescriptionInput} placeholder="Description" type="text" name="newDescription"></input>
+                    </form>
+
+                </CardContent>
+            </Collapse>
         </Card>
-    </div>
+    </div >
 
 }
 
