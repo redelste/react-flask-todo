@@ -11,7 +11,7 @@
 ### Run Instructions
 - In two separate terminals
 ---
-### Backend
+#### Backend
      cd utils
      virtualenv venv
      source venv/bin/activate
@@ -20,11 +20,11 @@
 
 #### To run the database with Docker
 
-To stop docker : `docker stop todo-postgres`
+    To stop docker : `docker stop todo-postgres`
 
-Remove the postgres instance : `docker rm todo-postgres`
+    Remove the postgres instance : `docker rm todo-postgres`
 
-Remove the database : `sudo rm -rf data`
+    Remove the database : `sudo rm -rf data`
 
 Rerun the following command:
 
