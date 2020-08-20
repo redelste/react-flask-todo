@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 import { updateTodo, deleteTodo } from '../utils/todoCalls'
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Divider from "@material-ui/core/Divider";
@@ -11,13 +11,17 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import IconButton from '@material-ui/core/IconButton';
 import CardActions from '@material-ui/core/CardActions';
 import CancelIcon from '@material-ui/icons/Cancel';
+import { TextField } from '@material-ui/core'
+
+
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
     },
     card: {
-        maxWidth: 500,
+        maxWidth: "20%",
+        maxHeight: "10%",
         margin: "20px auto",
         transition: "0.3s",
         boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
@@ -60,7 +64,27 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "right"
     }
 }));
-
+const UpdateTextField = withStyles({
+    root: {
+        '& label.Mui-focused': {
+            color: '#000000',
+        },
+        '& .MuiInput-underline:after': {
+            borderBottomColor: '#350908',
+        },
+        '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+                borderColor: 'red',
+            },
+            '&:hover fieldset': {
+                borderColor: 'yellow',
+            },
+            '&.Mui-focused fieldset': {
+                borderColor: 'green',
+            },
+        },
+    }
+})(TextField);
 
 const Todo = ({ todo, todos, setTodos }) => {
     const updateNameInput = useRef(null);
@@ -98,11 +122,21 @@ const Todo = ({ todo, todos, setTodos }) => {
 
     }
 
+    const updateTitleInputProps = {
+        name: "newName",
+        ref: updateNameInput
+    }
+
+    const updateDescriptionInputProps = {
+        name: "newDescription",
+        ref: updateDescriptionInput
+    }
+
     return <div key={todo.id} className={classes}>
         <Card className={classes.card}>
             <CancelIcon className={classes.cancelIcon} onClick={() => {
                 deleteTodo(todo.id, (data) => {
-                    // This does the same thing as above, except we only want the resultant list.
+                    // we only want the resultant list.
                     // If the element is equal todo.id, we don't want to keep it. (It's the delete function.)
                     // We do this because we cannot actually mutate todos (it's immutable). So we create a new list "rest", 
                     // which represents the "rest of the todos".
@@ -156,11 +190,22 @@ const Todo = ({ todo, todos, setTodos }) => {
                 </IconButton>
             </CardActions>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
+                <Typography>
+                    Update
+                </Typography>
                 <CardContent>
                     <form onSubmit={(e) => handleSubmit(e, updateNameInput, updateDescriptionInput)}>
                         <button type="submit" style={{ display: "none" }}>Update</button>
-                        <input ref={updateNameInput} type="text" placeholder="Title" name="newName"></input>
-                        <input ref={updateDescriptionInput} placeholder="Description" type="text" name="newDescription"></input>
+                        <UpdateTextField
+                            type="text"
+                            placeholder="Title"
+                            inputProps={updateTitleInputProps}>
+                        </UpdateTextField>
+                        <UpdateTextField
+                            placeholder="Description"
+                            type="text"
+                            inputProps={updateDescriptionInputProps}>
+                        </UpdateTextField>
                     </form>
 
                 </CardContent>

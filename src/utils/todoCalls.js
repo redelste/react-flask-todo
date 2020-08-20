@@ -48,10 +48,6 @@ const deleteTodo = (todoId, cb) => {
         .then(response => response.json())
         .then(data => {
             cb(data)
-            // // This does the same thing as above, except we only want the resultant list.
-            // // If the element is equal todo.id, we don't want to keep it. (It's the delete function.)
-            // // We do this because we cannot actually mutate todos (it's immutable). So we create a new list "rest", 
-            // // which represents the "rest of the todos".
             // const rest = todos.filter(filterTodo => filterTodo.id !== todo.id)
             // setTodos(rest)
         });

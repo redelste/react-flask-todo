@@ -31,24 +31,28 @@ const useStyles = makeStyles((theme) => ({
 const TodoTextField = withStyles({
   root: {
     '& label.Mui-focused': {
-      color: '#0b032d',
+      color: '#FFFFFF',
     },
     '& .MuiInput-underline:after': {
-      borderBottomColor: 'green',
+      borderBottomColor: '#FFFFFF',
     },
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
         borderColor: 'red',
       },
       '&:hover fieldset': {
-        borderColor: 'yellow',
+        borderColor: '#FFFFFF',
       },
       '&.Mui-focused fieldset': {
-        borderColor: 'green',
+        borderColor: '#FFFFFF',
       },
     },
   }
 })(TextField);
+
+
+
+
 
 const handleSubmit = (e, setTodos, setNewTodo, setNewDescription, todos, newTodo, newDescription) => {
   e.preventDefault();
