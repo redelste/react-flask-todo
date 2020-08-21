@@ -70,7 +70,7 @@ def updateData(id):
         sqlQuery = f"UPDATE todos SET name = (%s), description = (%s) WHERE id='{id}';"
         cur.execute(sqlQuery, (newName,newDescription,))
     elif newName == '' and newDescription == '':
-        return {"failure": False}
+        return {"success": False}
     conn.commit()
     return {"success": True}
 

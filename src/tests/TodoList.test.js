@@ -2,6 +2,7 @@ import React from 'react';
 import TodoList from "../components/TodoList";
 import { screen, render } from '@testing-library/react';
 import renderer from 'react-test-renderer';
+require('jest-fetch-mock').enableMocks()
 
 
 let todo = { datecreated: "2020-08-06T13:56:00", description: "testing", id: 399, name: "a test to " }

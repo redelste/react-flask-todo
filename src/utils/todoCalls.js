@@ -1,10 +1,11 @@
 
+const makeRequest = (endpoint, req, cb) => {
+    fetch(endpoint, req).then(res => res.json()).then(data => cb(data))
+}
+
+
 const getTodos = (cb) => {
-    fetch('/api/todos')
-        .then(res => res.json())
-        .then(data => {
-            cb(data)
-        })
+    makeRequest("/api/todos", {}, cb)
 }
 const addTodo = (newTodo, newDescription, cb) => {
     const addOptions = {
@@ -16,11 +17,7 @@ const addTodo = (newTodo, newDescription, cb) => {
         alert("Input cannot be empty")
         return;
     } else {
-        fetch('/api/add', addOptions)
-            .then(response => response.json())
-            .then(data => {
-                cb(data)
-            })
+        makeRequest('/api/add', addOptions, cb)
     }
 }
 
@@ -48,8 +45,6 @@ const deleteTodo = (todoId, cb) => {
         .then(response => response.json())
         .then(data => {
             cb(data)
-            // const rest = todos.filter(filterTodo => filterTodo.id !== todo.id)
-            // setTodos(rest)
         });
 }
 

@@ -1,5 +1,5 @@
 // import React from 'react';
-// import { updateTodo, addTodo, getTodos } from '../utils/todoCalls';
+import { updateTodo, addTodo, getTodos, deleteTodo } from '../utils/todoCalls';
 // import renderer from 'react-test-renderer';
 
 
@@ -7,7 +7,6 @@ import fetchMock from "jest-fetch-mock";
 
 fetchMock.enableMocks();
 
-const fetch = require("node-fetch");
 
 let todo = { datecreated: "2020-08-06T13:56:00", description: "testing", id: 399, name: "a test to " }
 
@@ -23,19 +22,50 @@ let updatedName = "an updated title of a task"
 let updatedDescription = "an updated description of a task"
 
 
-test ('throws error if false', () =>{
+test('throws error if false', () => {
     expect(todos).not.toBeNull();
 })
-// test('throws an error if empty object', () => {
-//     fetch.mockResponseOnce(JSON.stringify({ todos }));
-//     const onResponse = jest.fn();
-//     const onError = jest.fn();
 
-//     return getTodos()
-//         .then(onResponse)
-//         .catch(onError)
-//         .finally(()=>{
-//             expect(onResponse).not.toHaveBeenCalled();
-//             expect(onError).toHaveBeenCalled();
-//         })
-// })
+describe('testing our API Calls', () => {
+    beforeEach(() => {
+        fetch.resetMocks()
+    })
+
+    it('supplies a list of todos to a callback when getTodos is called', () => {
+        fetch.mockResponseOnce(JSON.stringify(todos));
+        getTodos(listOftodos => {
+            expect(listOftodos.length).toEqual(3)
+        })
+    })
+    // add
+    it('adds a new todo to the list of todos', () => {
+        fetch.mockResponseOnce(JSON.stringify({ id: 3, datecreated: new Date(), name: "greg", description: "heffley" }))
+        addTodo("greg", "heffley", singleTodo => {
+            expect(singleTodo.id).toEqual(3)
+            expect(singleTodo.name).toEqual("greg")
+            expect(singleTodo.description).toEqual("heffley")
+        })
+    })
+    // update
+    it('updates a todo in the list', () => {
+        fetch.mockResponseOnce(JSON.stringify({ "success": true }))
+        updateTodo(4, "Gregory", "Hefflye", updatedTodo => {
+            expect(updatedTodo.success).toEqual(true)
+        })
+    })
+    it('changes nothing if the backend return bad success value', () => {
+        fetch.mockResponseOnce(JSON.stringify({ "success": false }))
+        updateTodo(5, "", "Hefflye", updatedTodo => {
+            expect(updatedTodo.success).toEqual(false)
+        })
+    })
+    // delete
+    it('removes a todo item from the list of todos', () => {
+        fetch.mockResponseOnce(JSON.stringify({ "success": true, id: 100 }))
+        deleteTodo(100, res => {
+            expect(res.success).toEqual(true)
+            expect(res.id).toEqual(100)
+        })
+    })
+
+})

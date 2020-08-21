@@ -8,7 +8,6 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
-    "jest-fetch-mock": "^3.0.3",
     "material-ui-icons": "^1.0.0-beta.36",
     "node-fetch": "^2.6.0",
     "react": "^16.13.1",
@@ -39,6 +38,7 @@
   },
   "proxy": "http://localhost:5000",
   "devDependencies": {
+    "jest-fetch-mock": "^3.0.3",
     "react-test-renderer": "^16.13.1"
   }
 }

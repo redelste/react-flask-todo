@@ -132,7 +132,7 @@ const Todo = ({ todo, todos, setTodos }) => {
         ref: updateDescriptionInput
     }
 
-    return <div key={todo.id} className={classes}>
+    return <div key={todo.id} className={classes} data-testid="single-todo">
         <Card className={classes.card}>
             <CancelIcon className={classes.cancelIcon} onClick={() => {
                 deleteTodo(todo.id, (data) => {

@@ -16,6 +16,7 @@ exports[`Each todo renders correctly 1`] = `
       "subheading": "makeStyles-subheading-6",
     }
   }
+  data-testid="single-todo"
 >
   <div
     className="MuiPaper-root MuiCard-root makeStyles-card-2 MuiPaper-elevation1 MuiPaper-rounded"

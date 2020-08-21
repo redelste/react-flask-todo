@@ -20,6 +20,7 @@ exports[`TodoList renders correctly 1`] = `
         "subheading": "makeStyles-subheading-7",
       }
     }
+    data-testid="single-todo"
   >
     <div
       className="MuiPaper-root MuiCard-root makeStyles-card-3 MuiPaper-elevation1 MuiPaper-rounded"
@@ -124,6 +125,7 @@ exports[`TodoList renders correctly 1`] = `
         "subheading": "makeStyles-subheading-7",
       }
     }
+    data-testid="single-todo"
   >
     <div
       className="MuiPaper-root MuiCard-root makeStyles-card-3 MuiPaper-elevation1 MuiPaper-rounded"
@@ -228,6 +230,7 @@ exports[`TodoList renders correctly 1`] = `
         "subheading": "makeStyles-subheading-7",
       }
     }
+    data-testid="single-todo"
   >
     <div
       className="MuiPaper-root MuiCard-root makeStyles-card-3 MuiPaper-elevation1 MuiPaper-rounded"
