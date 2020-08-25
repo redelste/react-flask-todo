@@ -11,7 +11,7 @@ const addTodo = (newTodo, newDescription, cb) => {
     const addOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: newTodo, description: newDescription })
+        body: JSON.stringify({ name: newTodo, description: newDescription})
     };
     if (newTodo.trim() === "") {
         alert("Input cannot be empty")
@@ -27,25 +27,25 @@ const updateTodo = (todoId, updatedName, updatedDescription, cb) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ newName: updatedName, newDescription: updatedDescription })
     };
-
-    fetch(`/api/update/${todoId}`, updateOptions)
-        .then(response => response.json())
-        .then(data => {
-            cb(data)
-        })
+    makeRequest(`/api/update/${todoId}`, updateOptions, cb)
 }
 
 const deleteTodo = (todoId, cb) => {
-    const requestOptions = {
+    const deleteOptions = {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: todoId})
+        body: JSON.stringify({ id: todoId })
     };
-    fetch(`/api/delete`, requestOptions)
-        .then(response => response.json())
-        .then(data => {
-            cb(data)
-        });
+    makeRequest(`/api/delete`, deleteOptions, cb)
+}
+
+const markCompleted = (todo, isCompleted, cb) => {
+    const completedOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ todo, markCompleted: isCompleted })
+    }
+    makeRequest(`/api/markCompleted/`, completedOptions, cb)
 }
 
 
@@ -53,5 +53,6 @@ export {
     deleteTodo,
     addTodo,
     updateTodo,
-    getTodos
+    getTodos,
+    markCompleted
 }

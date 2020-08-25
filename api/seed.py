@@ -20,11 +20,12 @@ if __name__ == "__main__":
             id SERIAL PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             description VARCHAR(800) NOT NULL,
-            dateCreated TIMESTAMP
+            dateCreated TIMESTAMP,
+            isCompleted BOOLEAN DEFAULT FALSE
         );
         """,
-        f"""INSERT INTO todos(name,description,dateCreated) VALUES ('Fix the bugs', 'its broken', '{datetime.now()}') ON CONFLICT DO NOTHING;"""
-        f"""INSERT INTO todos(name,description,dateCreated) VALUES ('Fix duplicates', 'its annoying', '{datetime.now()}') ON CONFLICT DO NOTHING;"""
+        f"""INSERT INTO todos(name,description,dateCreated,isCompleted) VALUES ('Fix the bugs', 'its broken', '{datetime.now()}', 'True') ON CONFLICT DO NOTHING;"""
+        f"""INSERT INTO todos(name,description,dateCreated, isCompleted) VALUES ('Fix duplicates', 'its annoying', '{datetime.now()}', 'False') ON CONFLICT DO NOTHING;"""
 
     )
     conn = psycopg2.connect(

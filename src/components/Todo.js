@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { updateTodo, deleteTodo } from '../utils/todoCalls'
+import { updateTodo, deleteTodo, markCompleted } from '../utils/todoCalls'
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
@@ -12,23 +12,23 @@ import IconButton from '@material-ui/core/IconButton';
 import CardActions from '@material-ui/core/CardActions';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { TextField } from '@material-ui/core'
-
-
+import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
+import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
     },
     card: {
-        maxWidth: "20%",
-        maxHeight: "10%",
-        margin: "20px auto",
+        maxWidth: "100%",
+        maxHeight: "80%",
+        margin: "20px auto 0px 60px",
         transition: "0.3s",
         boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
         "&:hover": {
             boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)"
         },
-        height: "100%",
+        // height: "100%",
         padding: "20px"
 
     },
@@ -64,6 +64,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: "right"
     }
 }));
+
 const UpdateTextField = withStyles({
     root: {
         '& label.Mui-focused': {
@@ -133,8 +134,8 @@ const Todo = ({ todo, todos, setTodos }) => {
     }
 
     return <div key={todo.id} className={classes} data-testid="single-todo">
-        <Card className={classes.card}>
-            <CancelIcon className={classes.cancelIcon} onClick={() => {
+        <Card className={classes.card} style={{ backgroundColor: todo.iscompleted ? '#2B9EB3' : '#E7F59E' }}>
+            <IconButton className={classes.cancelIcon} onClick={() => {
                 deleteTodo(todo.id, (data) => {
                     // we only want the resultant list.
                     // If the element is equal todo.id, we don't want to keep it. (It's the delete function.)
@@ -144,9 +145,9 @@ const Todo = ({ todo, todos, setTodos }) => {
                     setTodos(rest)
                 })
             }}>
-            </CancelIcon>
+                <CancelIcon />
+            </IconButton>
             <CardContent className={classes.content}>
-
                 <Typography
                     className={"MuiTypography--heading"}
                     variant={"h6"}
@@ -189,16 +190,35 @@ const Todo = ({ todo, todos, setTodos }) => {
                     <ExpandMoreIcon />
                 </IconButton>
             </CardActions>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <Collapse in={expanded} timeout="auto" unmountOnExit >
                 <Typography>
                     Update
                 </Typography>
                 <CardContent>
                     <form onSubmit={(e) => handleSubmit(e, updateNameInput, updateDescriptionInput)}>
                         <button type="submit" style={{ display: "none" }}>Update</button>
+                        <IconButton onClick={e => {
+                            e.preventDefault();
+                            markCompleted(todo.id, todo.iscompleted, () => {
+                                const filteredTodos = todos.filter(filterTodo => filterTodo.id !== todo.id);
+                                const updateTodoCompletionStatus = {
+                                    ...todo,
+                                    iscompleted: !todo.iscompleted
+                                }
+                                setTodos([
+                                    ...filteredTodos,
+                                    updateTodoCompletionStatus
+                                ])
+
+                            })
+                        }}>
+                            {todo.iscompleted ? <CheckCircleIcon /> : <CheckCircleOutlineOutlinedIcon />}
+
+                        </IconButton>
                         <UpdateTextField
                             type="text"
                             placeholder="Title"
+                            
                             inputProps={updateTitleInputProps}>
                         </UpdateTextField>
                         <UpdateTextField

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import TodoList from './components/TodoList'
 import { addTodo, getTodos } from './utils/todoCalls';
 import { Typography, TextField, Button } from '@material-ui/core'
@@ -54,17 +54,25 @@ const TodoTextField = withStyles({
 
 
 
-const handleSubmit = (e, setTodos, setNewTodo, setNewDescription, todos, newTodo, newDescription) => {
+const handleSubmit = (e, setTodos, todos, newTodo, newDescription) => {
   e.preventDefault();
   if (newTodo) {
-    addTodo(newTodo, newDescription, (data) => {
+    addTodo(newTodo.current.value, newDescription.current.value, (data) => {
+      console.log(data)
       setTodos([
         ...todos,
-        { id: data.id, datecreated: data.datecreated, name: newTodo, description: newDescription }
+        {
+          id: data.id,
+          datecreated: data.datecreated,
+          name: newTodo.current.value,
+          description: newDescription.current.value,
+          iscompleted: data.isCompleted
+        }
       ])
+      newTodo.current.value = "";
+      newDescription.current.value = "";
     })
-    setNewTodo("");
-    setNewDescription("");
+
   }
 
 }
@@ -73,8 +81,10 @@ function App() {
   //  Always initialize state to the same data type as what we're going to fill it with
   //  todos is a list, and set Todos sets the state of this component to contain a list of todos.
   const [todos, setTodos] = useState([])
-  const [newTodo, setNewTodo] = useState("")
-  const [newDescription, setNewDescription] = useState("")
+  // const [newTodo, setNewTodo] = useState("")
+  // const [newDescription, setNewDescription] = useState("")
+  const titleInput = useRef(null)
+  const descriptionInput = useRef(null)
 
   const classes = useStyles();
 
@@ -89,26 +99,20 @@ function App() {
 
 
   const descriptionInputProps = {
-    value: newDescription,
     name: "description",
-    onChange: (event) => {
-      setNewDescription(event.target.value)
-    }
+    ref: descriptionInput
   }
 
   const titleInputProps = {
-    value: newTodo,
     name: "title",
-    onChange: (event) => {
-      setNewTodo(event.target.value)
-    }
+    ref: titleInput
   }
   return (
     <div className={classes.colors}>
-      <Grid container spacing={3}>
+      <Grid container spacing={2}>
         <Grid item xs={12}>
           {/* I know... this looks ridiculous */}
-          <form onSubmit={(e) => handleSubmit(e, setTodos, setNewTodo, setNewDescription, todos, newTodo, newDescription)} className={classes.centered}>
+          <form onSubmit={(e) => handleSubmit(e, setTodos, todos, titleInput, descriptionInput)} className={classes.centered}>
             <Typography variant='h4' align='center' gutterBottom>
               Todo List
             </Typography>

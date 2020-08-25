@@ -35,12 +35,12 @@ def addData():
     content = request.get_json()
     currentTime = now.strftime("%m/%d/%Y %H:%M")
     insertVals = (content['name'], content['description'])
-    sqlQuery = f"INSERT INTO todos(name,description,dateCreated) VALUES (%s,%s, '{currentTime}') ON CONFLICT DO NOTHING RETURNING id;"
+    sqlQuery = f"INSERT INTO todos(name,description,dateCreated, isCompleted) VALUES (%s,%s, '{currentTime}', false) ON CONFLICT DO NOTHING RETURNING id;"
     cur.execute(sqlQuery,insertVals)
     inserted_row = cur.fetchone()
     id_of_new_row = inserted_row[0]
     conn.commit()
-    return { "id": id_of_new_row, "datecreated": currentTime, **content }
+    return { "id": id_of_new_row, "datecreated": currentTime, **content, "isCompleted": False }
 
 
 @app.route('/api/delete', methods=['DELETE'])
@@ -56,8 +56,8 @@ def deleteData():
 @app.route('/api/update/<id>', methods=['PUT'])
 def updateData(id):
     content = request.get_json()    # sqlQuery = f"UPDATE todos SET name = %s WHERE id='{id}';"
-    newName = (content["newName"])  # store the new name in a var
-    newDescription = (content["newDescription"])
+    newName = content["newName"]  # store the new name in a var
+    newDescription = content["newDescription"]
     # sqlQuery = f"UPDATE todos SET name = %s WHERE id='{id}';"
     # need to pass a tuple to curser.execute.
     if newName == "" and newDescription != "":
@@ -75,11 +75,23 @@ def updateData(id):
     return {"success": True}
 
 @app.route('/api/update/description/<id>', methods=['PUT'])
-def updateDescription(id):
+def updateDescription():
     content = request.get_json()
     newDescription = (content["newDescription"])
     sqlQuery = f"UPDATE todos SET description = %s WHERE id='{id}';"
     cur.execute(sqlQuery, (newDescription,))
+    conn.commit()
+    return {"success": True}
+
+@app.route('/api/markCompleted/', methods=['PUT'])
+def markCompleted():
+    content = request.get_json()
+    print("CONTENT", content)
+    markCompleted = not(content["markCompleted"])
+    todoId = content["todo"]
+    # print("MARKCOMPLETED", markcompleted)
+    sqlQuery = f"UPDATE todos SET isCompleted = %s WHERE id= %s;"
+    cur.execute(sqlQuery, (markCompleted, todoId))
     conn.commit()
     return {"success": True}
 
@@ -95,4 +107,6 @@ if __name__ == "__main__":
     cur = conn.cursor()
 
     app.run(port=5000)
+
+
 
