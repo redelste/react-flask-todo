@@ -30,6 +30,15 @@ const updateTodo = (todoId, updatedName, updatedDescription, cb) => {
     makeRequest(`/api/update/${todoId}`, updateOptions, cb)
 }
 
+const updateStatus = (todoId, newStatus, cb) =>{
+    const statusOptions = {
+        method: 'PUT', 
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({status: newStatus})
+    }
+    makeRequest(`/api/update/status/${todoId}`, statusOptions, cb)
+}
+
 const deleteTodo = (todoId, cb) => {
     const deleteOptions = {
         method: 'DELETE',
@@ -39,20 +48,11 @@ const deleteTodo = (todoId, cb) => {
     makeRequest(`/api/delete`, deleteOptions, cb)
 }
 
-const markCompleted = (todo, isCompleted, cb) => {
-    const completedOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ todo, markCompleted: isCompleted })
-    }
-    makeRequest(`/api/markCompleted/`, completedOptions, cb)
-}
-
 
 export {
     deleteTodo,
     addTodo,
     updateTodo,
     getTodos,
-    markCompleted
+    updateStatus
 }

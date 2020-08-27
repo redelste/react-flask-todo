@@ -3,7 +3,7 @@ import TodoList from './components/TodoList'
 import { addTodo, getTodos } from './utils/todoCalls';
 import { Typography, TextField, Button } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
-
+import { statuses } from './components/Todo'
 import Grid from '@material-ui/core/Grid';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -66,7 +66,7 @@ const handleSubmit = (e, setTodos, todos, newTodo, newDescription) => {
           datecreated: data.datecreated,
           name: newTodo.current.value,
           description: newDescription.current.value,
-          iscompleted: data.isCompleted
+          status: data.status
         }
       ])
       newTodo.current.value = "";
@@ -108,41 +108,58 @@ function App() {
     ref: titleInput
   }
   return (
-    <div className={classes.colors}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          {/* I know... this looks ridiculous */}
-          <form onSubmit={(e) => handleSubmit(e, setTodos, todos, titleInput, descriptionInput)} className={classes.centered}>
-            <Typography variant='h4' align='center' gutterBottom>
-              Todo List
-            </Typography>
-            <Grid
-              container
-              direction="row"
-              justify="center"
-              alignItems="center">
-              <TodoTextField
-                className={classes.textField}
-                helperText="Enter a title for your Todo-Task"
-                label="Title"
-                inputProps={titleInputProps}
-              />
-              <TodoTextField
-                className={classes.textField}
-                helperText="Enter a description for your Todo-Task"
-                id="standard-basic"
-                label="Description"
-                inputProps={descriptionInputProps}
-              ></TodoTextField>
 
-              <Button type='submit' color='inherit' variant='outlined' size='small'>
-                Submit
-            </Button>
-            </Grid>
-          </form>
+    <div className={classes.colors}>
+      <form onSubmit={(e) => handleSubmit(e, setTodos, todos, titleInput, descriptionInput)} className={classes.centered}>
+        <Typography variant='h4' align='center' gutterBottom>
+          Todo List
+        </Typography>
+        <Grid container spacing={3} justify="center">
+
+          <TodoTextField
+            className={classes.textField}
+            helperText="Enter a title for your Todo-Task"
+            label="Title"
+            inputProps={titleInputProps}
+          />
+          <TodoTextField
+            className={classes.textField}
+            helperText="Enter a description for your Todo-Task"
+            id="standard-basic"
+            label="Description"
+            inputProps={descriptionInputProps}
+          ></TodoTextField>
+          <Button type='submit' color='inherit' variant='outlined' size='small'>
+            Submit
+        </Button>
         </Grid>
-        <TodoList todos={todos} setTodos={setTodos}></TodoList>
+      </form>
+      <Grid container spacing={3} justify="center" className={classes.colors}>
+        <Grid item xs={6} sm={3}>
+          <Typography variant='h6' align='center' gutterBottom>
+            New Todos
+          </Typography>
+          <TodoList todos={todos.filter(todo =>
+            todo.status === statuses.TODO
+          )} setTodos={setTodos}></TodoList>
+        </Grid>
+        <Grid item xs={6} sm={3}>
+          <Typography variant='h6' align='center' gutterBottom>
+            In Progress Todos
+          </Typography>
+          <TodoList todos={todos.filter(todo =>
+            todo.status === statuses.IN_PROGRESS
+          )} setTodos={setTodos}></TodoList>
+        </Grid>
+        <Grid item xs={6} sm={3}>
+          <Typography variant='h6' align='center' gutterBottom>
+            Completed Todos
+          </Typography>
+          <TodoList todos={todos.filter(todo =>
+            todo.status === statuses.COMPLETED
+          )} setTodos={setTodos}></TodoList>        </Grid>
       </Grid>
+
     </div>
   );
 }

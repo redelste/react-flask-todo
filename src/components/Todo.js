@@ -1,19 +1,32 @@
 import React, { useRef } from 'react';
-import { updateTodo, deleteTodo, markCompleted } from '../utils/todoCalls'
+import { updateTodo, deleteTodo, updateStatus } from '../utils/todoCalls'
 import { makeStyles, withStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import Divider from "@material-ui/core/Divider";
-import Typography from "@material-ui/core/Typography";
 import clsx from 'clsx';
-import Collapse from '@material-ui/core/Collapse';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import IconButton from '@material-ui/core/IconButton';
-import CardActions from '@material-ui/core/CardActions';
 import CancelIcon from '@material-ui/icons/Cancel';
-import { TextField } from '@material-ui/core'
-import CheckCircleOutlineOutlinedIcon from '@material-ui/icons/CheckCircleOutlineOutlined';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+
+import {
+    TextField,
+    Collapse,
+    Typography,
+    Divider,
+    CardContent,
+    Card,
+    CardActions,
+    CardHeader,
+    MenuItem,
+    InputLabel,
+    Select,
+    IconButton,
+    FormControl
+} from '@material-ui/core'
+
+
+export const statuses = {
+    TODO: 'TODO',
+    IN_PROGRESS: 'IN_PROGRESS',
+    COMPLETED: 'COMPLETED'
+}
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -21,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     },
     card: {
         maxWidth: "100%",
-        maxHeight: "80%",
+        maxHeight: "87%",
         margin: "20px auto 0px 60px",
         transition: "0.3s",
         boxShadow: "0 8px 40px -12px rgba(0,0,0,0.3)",
@@ -61,7 +74,10 @@ const useStyles = makeStyles((theme) => ({
         transform: 'rotate(180deg)',
     },
     cancelIcon: {
-        justifyContent: "right"
+        justifyContent: "right",
+        float: "right",
+        padding: 0,
+        margin: "inherit"
     }
 }));
 
@@ -100,6 +116,7 @@ const Todo = ({ todo, todos, setTodos }) => {
 
     const handleSubmit = (e, updateNameInput, updateDescriptionInput) => {
         e.preventDefault();
+        setExpanded(!expanded)
         updateTodo(todo.id, updateNameInput.current.value, updateDescriptionInput.current.value, (data) => {
             // state management --> need to refactor for redux
             const filteredTodos = todos.filter(filterTodo => filterTodo.id !== todo.id);
@@ -122,7 +139,18 @@ const Todo = ({ todo, todos, setTodos }) => {
 
 
     }
-
+    const getColorForStatus = status => {
+        switch (status) {
+            case statuses.TODO:
+                return "red"
+            case statuses.IN_PROGRESS:
+                return "yellow"
+            case statuses.COMPLETED:
+                return "green"
+            default:
+                console.error("INVALID STATUS:", status)
+        }
+    }
     const updateTitleInputProps = {
         name: "newName",
         ref: updateNameInput
@@ -134,19 +162,23 @@ const Todo = ({ todo, todos, setTodos }) => {
     }
 
     return <div key={todo.id} className={classes} data-testid="single-todo">
-        <Card className={classes.card} style={{ backgroundColor: todo.iscompleted ? '#2B9EB3' : '#E7F59E' }}>
-            <IconButton className={classes.cancelIcon} onClick={() => {
-                deleteTodo(todo.id, (data) => {
-                    // we only want the resultant list.
-                    // If the element is equal todo.id, we don't want to keep it. (It's the delete function.)
-                    // We do this because we cannot actually mutate todos (it's immutable). So we create a new list "rest", 
-                    // which represents the "rest of the todos".
-                    const rest = todos.filter(filterTodo => filterTodo.id !== todo.id)
-                    setTodos(rest)
-                })
-            }}>
-                <CancelIcon />
-            </IconButton>
+
+        <Card className={classes.card} style={{ backgroundColor: getColorForStatus(todo.status) }}>
+            <CardHeader action={
+                <IconButton className={classes.cancelIcon} onClick={() => {
+                    deleteTodo(todo.id, (data) => {
+                        // we only want the resultant list.
+                        // If the element is equal todo.id, we don't want to keep it. (It's the delete function.)
+                        // We do this because we cannot actually mutate todos (it's immutable). So we create a new list "rest", 
+                        // which represents the "rest of the todos".
+                        const rest = todos.filter(filterTodo => filterTodo.id !== todo.id)
+                        setTodos(rest)
+                    })
+                }}>
+                    <CancelIcon />
+                </IconButton>
+            } />
+
             <CardContent className={classes.content}>
                 <Typography
                     className={"MuiTypography--heading"}
@@ -154,7 +186,6 @@ const Todo = ({ todo, todos, setTodos }) => {
                     gutterBottom
                 >
                     {todo.name}
-
                 </Typography>
 
                 <Divider className={classes.divider} light />
@@ -178,7 +209,33 @@ const Todo = ({ todo, todos, setTodos }) => {
                     {todo.description}
                 </Typography>
             </CardContent>
+            <Divider className={classes.divider} light />
+
             <CardActions disableSpacing>
+                <FormControl>
+                    <InputLabel id={`todo-status-${todo.id}`}>Status</InputLabel>
+                    <Select
+                        labelId={`todo-status-${todo.id}`}
+                        value={todo.status}
+                        onChange={(e)=>{
+                            updateStatus(todo.id, e.target.value, (data)=>{
+                                const filteredTodos = todos.filter(filterTodo => filterTodo.id !== todo.id);
+                                const updatedTodo = {
+                                    ...todo,
+                                    status: e.target.value
+                                }
+                                setTodos([
+                                    ...filteredTodos,
+                                    updatedTodo
+                                ])
+                            })
+                        }}
+                    >
+                        <MenuItem value={statuses.TODO}>To-do</MenuItem>
+                        <MenuItem value={statuses.IN_PROGRESS}>In Progress</MenuItem>
+                        <MenuItem value={statuses.COMPLETED}>Completed</MenuItem>
+                    </Select>
+                </FormControl>
                 <IconButton
                     className={clsx(classes.expand, {
                         [classes.expandOpen]: expanded,
@@ -197,28 +254,9 @@ const Todo = ({ todo, todos, setTodos }) => {
                 <CardContent>
                     <form onSubmit={(e) => handleSubmit(e, updateNameInput, updateDescriptionInput)}>
                         <button type="submit" style={{ display: "none" }}>Update</button>
-                        <IconButton onClick={e => {
-                            e.preventDefault();
-                            markCompleted(todo.id, todo.iscompleted, () => {
-                                const filteredTodos = todos.filter(filterTodo => filterTodo.id !== todo.id);
-                                const updateTodoCompletionStatus = {
-                                    ...todo,
-                                    iscompleted: !todo.iscompleted
-                                }
-                                setTodos([
-                                    ...filteredTodos,
-                                    updateTodoCompletionStatus
-                                ])
-
-                            })
-                        }}>
-                            {todo.iscompleted ? <CheckCircleIcon /> : <CheckCircleOutlineOutlinedIcon />}
-
-                        </IconButton>
                         <UpdateTextField
                             type="text"
                             placeholder="Title"
-                            
                             inputProps={updateTitleInputProps}>
                         </UpdateTextField>
                         <UpdateTextField
@@ -227,7 +265,6 @@ const Todo = ({ todo, todos, setTodos }) => {
                             inputProps={updateDescriptionInputProps}>
                         </UpdateTextField>
                     </form>
-
                 </CardContent>
             </Collapse>
         </Card>
