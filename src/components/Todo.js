@@ -142,11 +142,11 @@ const Todo = ({ todo, todos, setTodos }) => {
     const getColorForStatus = status => {
         switch (status) {
             case statuses.TODO:
-                return "red"
+                return "white"
             case statuses.IN_PROGRESS:
-                return "yellow"
+                return "#FFB997"
             case statuses.COMPLETED:
-                return "green"
+                return "#b1b695"
             default:
                 console.error("INVALID STATUS:", status)
         }
