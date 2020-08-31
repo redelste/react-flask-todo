@@ -4,6 +4,8 @@ import Todo from './Todo';
 import { makeStyles } from '@material-ui/core/styles';
 
 
+import Draggable, { DraggableCore } from 'react-draggable'; // Both at the same time
+
 // import { red } from '@material-ui/core/colors';
 
 // we destructure props into the syntax {todos}.
@@ -32,8 +34,21 @@ const TodoList = ({ todos, setTodos }) => {
 
                 })
                 .map(todo =>
-                    <Todo key={todo.id} todo={todo} todos={todos} setTodos={setTodos}></Todo>
+                    <Draggable
+                        // axis="x"
+                        // handle=".handle"
+                        defaultPosition={{ x: 0, y: 0 }}
+                        position={null}
+                        // grid={[25, 25]}
+                        scale={1}>
+                        <div>
+                            <Todo key={todo.id} todo={todo} todos={todos} setTodos={setTodos}></Todo>
+
+                        </div>
+                    </Draggable>
                 )}
+
+
         </div>
     )
 }
