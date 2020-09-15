@@ -36,6 +36,9 @@ const TodoList = ({ todos, setTodos }) => {
                         position={null}
                         scale={1}>
                         <div>
+                            {/* passing props into Todo component. Todos is a list of todos. setTodos is the current state.
+
+                            */}
                             <Todo key={todo.id} todo={todo} todos={todos} setTodos={setTodos}></Todo>
                         </div>
                     </Draggable>

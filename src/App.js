@@ -157,7 +157,8 @@ function App() {
           </Typography>
           <TodoList todos={todos.filter(todo =>
             todo.status === statuses.COMPLETED
-          )} setTodos={setTodos}></TodoList>        </Grid>
+          )} setTodos={setTodos}></TodoList>
+        </Grid>
       </Grid>
 
     </div>
