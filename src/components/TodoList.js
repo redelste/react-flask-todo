@@ -4,7 +4,7 @@ import Todo from './Todo';
 import { makeStyles } from '@material-ui/core/styles';
 
 
-import Draggable, { DraggableCore } from 'react-draggable'; // Both at the same time
+import Draggable from 'react-draggable'; // Both at the same time
 
 // import { red } from '@material-ui/core/colors';
 

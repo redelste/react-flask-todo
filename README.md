@@ -11,13 +11,6 @@
 ### Run Instructions
 - In two separate terminals
 ---
-#### Backend
-     cd utils
-     virtualenv venv
-     source venv/bin/activate
-     pip install -r requirements.txt
-     python3 api.py
-
 #### To run the database with Docker
 
     To stop docker : `docker stop todo-postgres`
@@ -38,17 +31,19 @@ Rerun the following command:
         postgres
 
 ```        
+#### Backend
+     cd api
+     python3 -m venv venv
+     source venv/bin/activate
+     pip install -r requirements.txt
+     python3 api.py
+
+
 #### Frontend
-    cd src
     npm install
     npm start   
 
-
-    
-
-
 ### .Env
-
     Create a .env file with the following parameters in the API Folder:
     PG_PASS=<ENVIRONMENT PASSWORD>
     PG_PORT=<POSTGRES PORT>
