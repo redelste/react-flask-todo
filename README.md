@@ -36,7 +36,11 @@ Rerun the following command:
      python3 -m venv venv
      source venv/bin/activate
      pip install -r requirements.txt
-     python3 api.py
+     
+     - Seed the Database:
+     -- python3 seed.py
+     - Run the Database 
+     --python3 api.py
 
 
 #### Frontend

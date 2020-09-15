@@ -139,25 +139,19 @@ function App() {
           <Typography variant='h6' align='center' gutterBottom>
             New Todos
           </Typography>
-          <TodoList todos={todos.filter(todo =>
-            todo.status === statuses.TODO
-          )} setTodos={setTodos}></TodoList>
+          <TodoList todos={todos} setTodos={setTodos} status={statuses.TODO} />
         </Grid>
         <Grid item xs={6} sm={3}>
           <Typography variant='h6' align='center' gutterBottom>
             In Progress Todos
           </Typography>
-          <TodoList todos={todos.filter(todo =>
-            todo.status === statuses.IN_PROGRESS
-          )} setTodos={setTodos}></TodoList>
+          <TodoList todos={todos} setTodos={setTodos} status={statuses.IN_PROGRESS} />
         </Grid>
         <Grid item xs={6} sm={3}>
           <Typography variant='h6' align='center' gutterBottom>
             Completed Todos
           </Typography>
-          <TodoList todos={todos.filter(todo =>
-            todo.status === statuses.COMPLETED
-          )} setTodos={setTodos}></TodoList>
+          <TodoList todos={todos} setTodos={setTodos} status={statuses.COMPLETED} />
         </Grid>
       </Grid>
 

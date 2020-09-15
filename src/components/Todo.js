@@ -41,11 +41,8 @@ const useStyles = makeStyles((theme) => ({
         "&:hover": {
             boxShadow: "0 16px 70px -12.125px rgba(0,0,0,0.3)"
         },
-        // height: "100%",
         padding: "20px"
-
     },
-
     content: {
         textAlign: "left",
         padding: 3,
@@ -60,7 +57,6 @@ const useStyles = makeStyles((theme) => ({
         lineHeight: 1.8
     },
     shapeCircle: {
-
         borderRadius: '50%',
     },
     expand: {
