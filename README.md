@@ -29,13 +29,14 @@
 Rerun the following command:
 
 ```bash
-    docker run -d \        
+    docker run -d \
         --name todo-postgres \
-        -e POSTGRES_PASSWORD="YOUR SECRET PASSWORD" \
+        -e POSTGRES_PASSWORD=newEnvPass \
         -e PGDATA=/var/lib/postgresql/data/pgdata \
         -v $PWD/data:/var/lib/postgresql/data \
         -p "5432:5432" \
-        postgres  
+        postgres
+
 ```        
 #### Frontend
     cd src
@@ -44,5 +45,13 @@ Rerun the following command:
 
 
     
+
+
+### .Env
+
+    Create a .env file with the following parameters in the API Folder:
+    PG_PASS=<ENVIRONMENT PASSWORD>
+    PG_PORT=<POSTGRES PORT>
+
 
 
